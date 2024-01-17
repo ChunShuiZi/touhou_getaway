@@ -30,7 +30,7 @@ public class LogInterceptor {
         if (GlobalConfiguration.LogLevel_IsFatal()) {
             try {
                 return point.proceed();
-            } catch (Throwable _) { }
+            } catch (Throwable e) { }
         }
         return null;
     }
@@ -39,7 +39,7 @@ public class LogInterceptor {
         if (GlobalConfiguration.LogLevel_IsError()) {
             try {
                 return point.proceed();
-            } catch (Throwable _) { }
+            } catch (Throwable e) { }
         }
         return null;
     }
@@ -48,7 +48,7 @@ public class LogInterceptor {
         if (GlobalConfiguration.LogLevel_IsWarn()) {
             try {
                 return point.proceed();
-            } catch (Throwable _) { }
+            } catch (Throwable e) { }
         }
         return null;
     }
@@ -58,7 +58,7 @@ public class LogInterceptor {
         if (GlobalConfiguration.LogLevel_IsInfo()) {
             try {
                 return point.proceed();
-            } catch (Throwable _) { }
+            } catch (Throwable e) { }
         }
         return null;
     }
@@ -68,7 +68,7 @@ public class LogInterceptor {
         if (GlobalConfiguration.LogLevel_IsDebug()) {
             try {
                 return point.proceed();
-            } catch (Throwable _) { }
+            } catch (Throwable e) { }
         }
         return null;
     }
@@ -78,7 +78,7 @@ public class LogInterceptor {
         if (GlobalConfiguration.LogLevel_IsTrace()) {
             try {
                 return point.proceed();
-            } catch (Throwable _) { }
+            } catch (Throwable e) { }
         }
         return null;
     }

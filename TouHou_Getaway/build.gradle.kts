@@ -129,15 +129,15 @@ tasks.test {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    this.options.compilerArgs.add("--enable-preview")
+    // this.options.compilerArgs.add("--enable-preview")
     this.options.encoding = "UTF-8"
 }
 
 tasks.withType<Test>().configureEach {
-    jvmArgs(listOf(jvmArgs, "--enable-preview"))
+    // jvmArgs(listOf(jvmArgs, "--enable-preview"))
 }
 
 tasks.withType<JavaExec>().configureEach {
-    jvmArgs(listOf(jvmArgs, "--enable-preview"))
+    // jvmArgs(listOf(jvmArgs, "--enable-preview"))
     systemProperty("log4j.skipJansi", "false")
 }
