@@ -1,6 +1,7 @@
 plugins {
     id("java-library")
     kotlin("jvm") version "2.0.0-Beta2"
+    id("io.freefair.aspectj.post-compile-weaving") version "8.4"
 }
 
 group = "org.thcg"
@@ -12,6 +13,13 @@ java {
 }
 
 repositories {
+    maven {
+        setUrl("https://maven.aliyun.com/repository/public/")
+    }
+    maven {
+        setUrl("https://maven.aliyun.com/repository/spring/")
+    }
+    mavenLocal()
     mavenCentral()
 }
 
@@ -24,6 +32,8 @@ val flatlafVersion = "3.2.5"
 val flatlafJetbrainsMonoVersion = "2.242"
 val kotlinVersion = "2.0.0-Beta2"
 val kotlinCoroutinesVersion = "1.7.1"
+val aspectjVersion = "1.9.21"
+val byteBuddyVersion = "1.14.11"
 val lombokVersion = "1.18.30"
 val junitVersion = "5.9.2"
 val kotlinTestVersion = "1.8.10"
@@ -94,6 +104,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlinCoroutinesVersion")
 
+    implementation("org.aspectj:aspectjrt:$aspectjVersion")
+    implementation("org.aspectj:aspectjtools:$aspectjVersion")
+    runtimeOnly("org.aspectj:aspectjweaver:$aspectjVersion")
+
+    implementation("net.bytebuddy:byte-buddy:$byteBuddyVersion")
+
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
@@ -112,8 +128,16 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.register<JavaExec>("runApplication") {
+tasks.withType<JavaCompile>().configureEach {
+    this.options.compilerArgs.add("--enable-preview")
+    this.options.encoding = "UTF-8"
+}
+
+tasks.withType<Test>().configureEach {
+    jvmArgs(listOf(jvmArgs, "--enable-preview"))
+}
+
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs(listOf(jvmArgs, "--enable-preview"))
     systemProperty("log4j.skipJansi", "false")
-    mainClass = "org.thcg.Main"
-    classpath = sourceSets["main"].runtimeClasspath
 }
