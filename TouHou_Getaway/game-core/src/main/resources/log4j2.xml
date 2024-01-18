@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Create Date: 23:33  2024.01.17 -->
+<!-- Create User: Severle -->
+<!-- VM Options:-Dlog4j.skipJansi=false-->
+<Configuration status="INFO" monitorInterval="30">
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%-5level]}{ERROR=Bright RED, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White} %style{[%t]}{bright,magenta} %style{%c{1.}.%M(%L)}{cyan}: %msg%n"/>
+        </Console>
+        <RollingFile name="RollingFile-Appender" fileName="logs/latest.log"
+                     filePattern="logs/%d-%i.log.gz" append="false">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36}(%L) - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="all">
+            <Appender-Ref ref="Console-Appender"/>
+            <Appender-Ref ref="RollingFile-Appender"/>
+        </Root>
+    </Loggers>
+    <Properties>
+        <Property name="log4j2.console.encoding">UTF-8</Property>
+    </Properties>
+</Configuration>
