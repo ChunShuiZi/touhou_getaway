@@ -11,5 +11,9 @@ public interface GameConstant {
     int LEFT = 0x02;
     int RIGHT = 0x03;
     int MOVE_STEP = 3;
+    // 物体大小
+    int RADIUS = 8;
+    // 顶部距离屏幕最上方的不可进入的空余空间
+    int TOP_BLANK_HEIGHT = 0;
     int SCORE = 1;
 }

@@ -22,9 +22,6 @@ class GameScreen : ManagedScreenAdapter() {
 
     private var inputProcessor: MyInputProcessor = MyInputProcessor(this)
 
-    private val radius: Int = 8
-    // 顶部距离屏幕最上方的不可进入的空余空间
-    private val topBlankHeight: Int = 0
     // 初始化人物位置
     private var x: Int = 300
     private var y: Int = 8
@@ -41,20 +38,20 @@ class GameScreen : ManagedScreenAdapter() {
         viewport.apply()
         shape.projectionMatrix = viewport.camera.combined
         shape.begin(ShapeRenderer.ShapeType.Filled)
-        shape.circle(x.toFloat(), y.toFloat(), radius.toFloat())
+        shape.circle(x.toFloat(), y.toFloat(), RADIUS.toFloat())
         val color = Color.RED
         shape.color = color
         shape.end()
         x += xSpeed
         y += ySpeed
-        if (x >= viewport.worldWidth - radius)
-            x = viewport.worldWidth.toInt() - radius
-        if (y >= viewport.worldHeight - radius - topBlankHeight)
-            y = viewport.worldHeight.toInt() - radius - topBlankHeight
-        if (x <= radius)
-            x = radius
-        if (y <= radius)
-            y = radius
+        if (x >= viewport.worldWidth - RADIUS)
+            x = viewport.worldWidth.toInt() - RADIUS
+        if (y >= viewport.worldHeight - RADIUS - TOP_BLANK_HEIGHT)
+            y = viewport.worldHeight.toInt() - RADIUS - TOP_BLANK_HEIGHT
+        if (x <= RADIUS)
+            x = RADIUS
+        if (y <= RADIUS)
+            y = RADIUS
     }
 
     fun handleFeedbackData(data: Int) {
