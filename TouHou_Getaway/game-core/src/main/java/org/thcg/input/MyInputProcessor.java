@@ -44,6 +44,7 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
         return false;
     }
 
+    //传入按键和状态，判断对象边界条件，执行对应事件，返回布尔值
     @Override
     public boolean keyTyped(char character) {
         // 处理键盘字符输入事件
@@ -87,4 +88,6 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
         int DOWN = 0x00;
         int RELEASE = 0x10;
     }
+
+    //按键类型，有按下和释放两种状态
 }

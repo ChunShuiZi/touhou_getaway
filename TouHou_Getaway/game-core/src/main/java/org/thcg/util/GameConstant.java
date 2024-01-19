@@ -11,4 +11,5 @@ public interface GameConstant {
     int LEFT = 0x02;
     int RIGHT = 0x03;
     int MOVE_STEP = 5;
+    int SCORE = 1;
 }

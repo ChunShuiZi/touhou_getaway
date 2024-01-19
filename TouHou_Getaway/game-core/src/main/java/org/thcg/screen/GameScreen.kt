@@ -16,6 +16,7 @@ import org.thcg.util.GameConstant
 class GameScreen : ManagedScreenAdapter() {
     private var inputProcessor: MyInputProcessor = MyInputProcessor(this)
 
+    //初始化人物位置
     private var x: Int = 300
     private var y: Int = 8
     private var xSpeed: Int = 0
@@ -34,7 +35,7 @@ class GameScreen : ManagedScreenAdapter() {
         shape.end()
         x += xSpeed
         y += ySpeed
-
+        //边界条件，使人物一直处在屏幕内
         if (x >= Gdx.graphics.width - 8) {
             x = Gdx.graphics.width - 8
         }
