@@ -1,8 +1,9 @@
 package org.thcg.input;
-import com.badlogic.gdx.Input;
 
 import com.badlogic.gdx.InputProcessor;
 import org.thcg.GameCore;
+import org.thcg.config.ConfigManager;
+import org.thcg.config.InputConfig;
 import org.thcg.util.GameConstant;
 
 public class MyInputProcessor implements InputProcessor, GameConstant {
@@ -14,45 +15,32 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
 
     @Override
     public boolean keyDown(int keycode) {
-        // 处理键盘按下事件
-        if(keycode == Input.Keys.W) {
-            game.handleFeedbackData(UP_DOWN);
-            return true;
-        }
-        if(keycode == Input.Keys.S) {
-            game.handleFeedbackData(DOWN_DOWN);
-            return true;
-        }
-        if(keycode == Input.Keys.A) {
-            game.handleFeedbackData(LEFT_DOWN);
-            return true;
-        }
-        if(keycode == Input.Keys.D) {
-            game.handleFeedbackData(RIGHT_DOWN);
-            return true;
-        }
-        return false;
+        return key(keycode, Type.DOWN);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.W) {
-            game.handleFeedbackData(UP_RELEASE);
+        return key(keycode, Type.RELEASE);
+    }
+
+    private boolean key(int keycode, int type) {
+        InputConfig inputConfig = ConfigManager.INSTANCE.getInputConfig();
+        if(keycode == inputConfig.getUpKey()) {
+            game.handleFeedbackData(UP | type);
             return true;
         }
-        if(keycode == Input.Keys.S) {
-            game.handleFeedbackData(DOWN_RELEASE);
+        if(keycode == inputConfig.getDownKey()) {
+            game.handleFeedbackData(DOWN | type);
             return true;
         }
-        if(keycode == Input.Keys.A) {
-            game.handleFeedbackData(LEFT_RELEASE);
+        if(keycode == inputConfig.getLeftKey()) {
+            game.handleFeedbackData(LEFT | type);
             return true;
         }
-        if(keycode == Input.Keys.D) {
-            game.handleFeedbackData(RIGHT_RELEASE);
+        if(keycode == inputConfig.getRightKey()) {
+            game.handleFeedbackData(RIGHT | type);
             return true;
         }
-        // 处理键盘抬起事件
         return false;
     }
 
@@ -95,5 +83,8 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
         return false;
     }
 
-    // ...
+    public interface Type {
+        int DOWN = 0x00;
+        int RELEASE = 0x10;
+    }
 }

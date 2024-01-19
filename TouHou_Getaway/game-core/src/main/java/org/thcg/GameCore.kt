@@ -4,7 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import org.thcg.core.Disposer
+import org.thcg.core.Initializer
 import org.thcg.input.MyInputProcessor
+import org.thcg.input.MyInputProcessor.Type
 import org.thcg.util.GameConstant.*
 
 
@@ -18,6 +21,8 @@ class GameCore : ApplicationAdapter() {
     private lateinit var shape: ShapeRenderer
 
     override fun create() {
+        Initializer.initialize()
+
         shape = ShapeRenderer()
         inputProcessor = MyInputProcessor(this)
         Gdx.input.inputProcessor = inputProcessor
@@ -31,14 +36,14 @@ class GameCore : ApplicationAdapter() {
         x += xSpeed
         y += ySpeed
 
-        if (x >= Gdx.graphics.getWidth()) {
-            x = Gdx.graphics.getWidth()
+        if (x >= Gdx.graphics.width) {
+            x = Gdx.graphics.width
         }
         if (x <= 0) {
             x = 0
         }
-        if (y >= Gdx.graphics.getWidth()) {
-            y = Gdx.graphics.getWidth()
+        if (y >= Gdx.graphics.width) {
+            y = Gdx.graphics.width
         }
         if (y <= 0) {
             y = 0
@@ -49,31 +54,34 @@ class GameCore : ApplicationAdapter() {
     fun handleFeedbackData(data: Int) {
         // 处理从输入处理器中传回的数据
         // 示例：打印数据
-        if (data == UP_DOWN) {
+        if (data == UP or Type.DOWN) {
             ySpeed += MOVE_STEP
         }
-        if (data == DOWN_DOWN) {
+        if (data == DOWN or Type.DOWN) {
             ySpeed -= MOVE_STEP
         }
-        if (data == LEFT_DOWN) {
+        if (data == LEFT or Type.DOWN) {
             xSpeed -= MOVE_STEP
         }
-        if (data == RIGHT_DOWN) {
+        if (data == RIGHT or Type.DOWN) {
             xSpeed += MOVE_STEP
         }
-        if (data == UP_RELEASE) {
+        if (data == UP or Type.RELEASE) {
             ySpeed -= MOVE_STEP
         }
-        if (data == DOWN_RELEASE) {
+        if (data == DOWN or Type.RELEASE) {
             ySpeed += MOVE_STEP
         }
-        if (data == LEFT_RELEASE) {
+        if (data == LEFT or Type.RELEASE) {
             xSpeed += MOVE_STEP
         }
-        if (data == RIGHT_RELEASE) {
+        if (data == RIGHT or Type.RELEASE) {
             xSpeed -= MOVE_STEP
         }
     }
 
+    override fun dispose() {
+        Disposer.dispose()
+    }
 }
 

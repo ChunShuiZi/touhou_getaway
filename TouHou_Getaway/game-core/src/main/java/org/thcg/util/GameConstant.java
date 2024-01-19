@@ -6,13 +6,9 @@ package org.thcg.util;
  * @description
  */
 public interface GameConstant {
-    int UP_DOWN = 1;
-    int DOWN_DOWN = 2;
-    int LEFT_DOWN = 3;
-    int RIGHT_DOWN = 4;
-    int UP_RELEASE = 5;
-    int DOWN_RELEASE = 6;
-    int LEFT_RELEASE = 7;
-    int RIGHT_RELEASE = 8;
+    int UP = 0x00;
+    int DOWN = 0x01;
+    int LEFT = 0x02;
+    int RIGHT = 0x03;
     int MOVE_STEP = 5;
 }

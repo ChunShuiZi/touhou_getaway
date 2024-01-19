@@ -58,6 +58,8 @@ val log4jVersion = "3.0.0-beta1"
 val lwjglVersion = "3.3.3"
 val gsonVersion = "2.10.1"
 val xmlVersion = "4.0.1"
+val configVersion = "1.4.3"
+val config4kVersion = "0.6.0"
 val kotlinVersion = "2.0.0-Beta2"
 val kotlinxCoroutinesVersion = "1.8.0-RC2"
 val lombokVersion = "1.18.30"
@@ -94,6 +96,9 @@ dependencies {
 
     api("com.google.code.gson:gson:$gsonVersion")
     api("jakarta.xml.bind:jakarta.xml.bind-api:$xmlVersion")
+
+    api("com.typesafe:config:$configVersion")
+    api("io.github.config4k:config4k:$config4kVersion")
 
     api("com.badlogicgames.gdx:gdx:$gdxVersion")
     api("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
