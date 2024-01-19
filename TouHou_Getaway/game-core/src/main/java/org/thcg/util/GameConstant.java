@@ -12,4 +12,6 @@ public interface GameConstant {
     int RIGHT = 0x03;
     int MOVE_STEP = 5;
     int SCORE = 1;
+    String USER_FILE_PATH = "game.assets.userdata";
+
 }
