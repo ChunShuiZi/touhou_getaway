@@ -16,16 +16,20 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
     public boolean keyDown(int keycode) {
         // 处理键盘按下事件
         if(keycode == Input.Keys.W) {
-            return game.handleFeedbackData(UP_DOWN);
+            game.handleFeedbackData(UP_DOWN);
+            return true;
         }
         if(keycode == Input.Keys.S) {
-            return game.handleFeedbackData(DOWN_DOWN);
+            game.handleFeedbackData(DOWN_DOWN);
+            return true;
         }
         if(keycode == Input.Keys.A) {
-            return game.handleFeedbackData(LEFT_DOWN);
+            game.handleFeedbackData(LEFT_DOWN);
+            return true;
         }
         if(keycode == Input.Keys.D) {
-            return game.handleFeedbackData(RIGHT_DOWN);
+            game.handleFeedbackData(RIGHT_DOWN);
+            return true;
         }
         return false;
     }
@@ -33,16 +37,20 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.W) {
-            return game.handleFeedbackData(UP_RELEASE);
+            game.handleFeedbackData(UP_RELEASE);
+            return true;
         }
         if(keycode == Input.Keys.S) {
-            return game.handleFeedbackData(DOWN_RELEASE);
+            game.handleFeedbackData(DOWN_RELEASE);
+            return true;
         }
         if(keycode == Input.Keys.A) {
-            return game.handleFeedbackData(LEFT_RELEASE);
+            game.handleFeedbackData(LEFT_RELEASE);
+            return true;
         }
         if(keycode == Input.Keys.D) {
-            return game.handleFeedbackData(RIGHT_RELEASE);
+            game.handleFeedbackData(RIGHT_RELEASE);
+            return true;
         }
         // 处理键盘抬起事件
         return false;

@@ -31,57 +31,48 @@ class GameCore : ApplicationAdapter() {
         x += xSpeed
         y += ySpeed
 
-        if (x >= Gdx.graphics.width) {
-            xSpeed = 0
+        if (x >= Gdx.graphics.getWidth()) {
+            x = Gdx.graphics.getWidth()
         }
         if (x <= 0) {
-            xSpeed = 0
+            x = 0
         }
-        if (y >= Gdx.graphics.width) {
-            ySpeed = 0
+        if (y >= Gdx.graphics.getWidth()) {
+            y = Gdx.graphics.getWidth()
         }
         if (y <= 0) {
-            ySpeed = 0
+            y = 0
         }
 
     }
 
-    fun handleFeedbackData(data: Int): Boolean {
+    fun handleFeedbackData(data: Int) {
         // 处理从输入处理器中传回的数据
         // 示例：打印数据
         if (data == UP_DOWN) {
             ySpeed += MOVE_STEP
-            return true
         }
         if (data == DOWN_DOWN) {
             ySpeed -= MOVE_STEP
-            return true
         }
         if (data == LEFT_DOWN) {
             xSpeed -= MOVE_STEP
-            return true
         }
         if (data == RIGHT_DOWN) {
             xSpeed += MOVE_STEP
-            return true
         }
-        if (data == UP_RELEASE && y > 0 && y < Gdx.graphics.width) {
+        if (data == UP_RELEASE) {
             ySpeed -= MOVE_STEP
-            return true
         }
-        if (data == DOWN_RELEASE && y > 0 && y < Gdx.graphics.width) {
+        if (data == DOWN_RELEASE) {
             ySpeed += MOVE_STEP
-            return true
         }
-        if (data == LEFT_RELEASE && x > 0 && x < Gdx.graphics.width) {
+        if (data == LEFT_RELEASE) {
             xSpeed += MOVE_STEP
-            return true
         }
-        if (data == RIGHT_RELEASE && x > 0 && x < Gdx.graphics.width) {
+        if (data == RIGHT_RELEASE) {
             xSpeed -= MOVE_STEP
-            return true
         }
-        return false
     }
 
 }
