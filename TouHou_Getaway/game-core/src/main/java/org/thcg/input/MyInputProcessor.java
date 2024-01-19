@@ -1,15 +1,15 @@
 package org.thcg.input;
 
 import com.badlogic.gdx.InputProcessor;
-import org.thcg.GameCore;
 import org.thcg.config.ConfigManager;
 import org.thcg.config.InputConfig;
+import org.thcg.screen.GameScreen;
 import org.thcg.util.GameConstant;
 
 public class MyInputProcessor implements InputProcessor, GameConstant {
-    private final GameCore game;
+    private final GameScreen game;
 
-    public MyInputProcessor(GameCore game) {
+    public MyInputProcessor(GameScreen game) {
         this.game = game;
     }
 
