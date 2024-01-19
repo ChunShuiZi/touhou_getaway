@@ -10,6 +10,6 @@ public interface GameConstant {
     int DOWN = 0x01;
     int LEFT = 0x02;
     int RIGHT = 0x03;
-    int MOVE_STEP = 5;
+    int MOVE_STEP = 3;
     int SCORE = 1;
 }
