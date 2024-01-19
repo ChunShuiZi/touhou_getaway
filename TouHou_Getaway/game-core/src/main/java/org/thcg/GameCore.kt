@@ -50,14 +50,14 @@ class GameCore : ApplicationAdapter() {
         // 处理从输入处理器中传回的数据
         // 示例：打印数据
         var result = Integer.parseInt("$data");
-        if(result==1&&(y>=0 &&y <= Gdx.graphics.getWidth())) ySpeed=ySpeed+5;
-        if(result==2&&(y>=0 &&y <= Gdx.graphics.getWidth())) ySpeed=ySpeed-5;
-        if(result==3&&(x>=0 &&x <= Gdx.graphics.getWidth())) xSpeed=xSpeed-5;
-        if(result==4&&(x>=0 &&x <= Gdx.graphics.getWidth())) xSpeed=xSpeed+5;
-        if(result==5&&(y>0 &&y < Gdx.graphics.getWidth())) ySpeed=ySpeed-5;
-        if(result==6&&(y>0 &&y < Gdx.graphics.getWidth())) ySpeed=ySpeed+5;
-        if(result==7&&(x>0 &&x < Gdx.graphics.getWidth())) xSpeed=xSpeed+5;
-        if(result==8&&(x>0 &&x < Gdx.graphics.getWidth())) xSpeed=xSpeed-5;
+        if(result==1 ) ySpeed=ySpeed+5;
+        if(result==2 ) ySpeed=ySpeed-5;
+        if(result==3 ) xSpeed=xSpeed-5;
+        if(result==4 ) xSpeed=xSpeed+5;
+        if(result==5 && y>0 &&y < Gdx.graphics.getWidth()) ySpeed=ySpeed-5;
+        if(result==6 && y>0 &&y < Gdx.graphics.getWidth()) ySpeed=ySpeed+5;
+        if(result==7 && x>0 &&x < Gdx.graphics.getWidth()) xSpeed=xSpeed+5;
+        if(result==8 && x>0 &&x < Gdx.graphics.getWidth()) xSpeed=xSpeed-5;
 
     }
 
