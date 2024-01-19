@@ -6,8 +6,7 @@ import de.eskalon.commons.core.ManagedGame
 import de.eskalon.commons.screen.ManagedScreen
 import de.eskalon.commons.screen.transition.ScreenTransition
 import de.eskalon.commons.screen.transition.impl.BlendingTransition
-import org.thcg.core.Disposer
-import org.thcg.core.Initializer
+import org.thcg.core.Loader
 import org.thcg.screen.GameScreen
 
 
@@ -17,14 +16,14 @@ class GameCore : ManagedGame<ManagedScreen, ScreenTransition>() {
     val batch: SpriteBatch get() = _batch
     override fun create() {
         super.create()
-        Initializer.initialize()
+        Loader.initialize()
         this._batch = SpriteBatch()
         this.screenManager.setAutoDispose(true, true)
         this.screenManager.pushScreen(GameScreen(), BlendingTransition(_batch, 1f, Interpolation.pow2In))
     }
 
     override fun dispose() {
-        Disposer.dispose()
+        Loader.terminal()
     }
 }
 
