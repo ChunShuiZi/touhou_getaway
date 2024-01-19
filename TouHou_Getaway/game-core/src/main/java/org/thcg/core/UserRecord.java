@@ -36,18 +36,18 @@ public class UserRecord extends User {
     }
 
 
-    public void saveUserScore(User user) {
+    public void saveUserScore(UserRecord userRecord) {
         try{
-            FileWriter fw = new FileWriter(this.recordFile);
+            FileWriter fw = new FileWriter(userRecord.recordFile);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.newLine();
-            bw.write(this.newRecord);
+            bw.write(userRecord.newRecord);
 
             LocalDateTime currentTime = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            this.recordTime = currentTime.format(formatter);
+            userRecord.recordTime = currentTime.format(formatter);
 
-            bw.write("-----" + this.recordTime);
+            bw.write("-----" + userRecord.recordTime);
             bw.close();
             fw.close();
             System.out.println("User new record appended to file successfully.");
