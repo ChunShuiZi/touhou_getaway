@@ -38,17 +38,28 @@ val appName: String = project.property("app.name").toString()
 val projectName: String = "$appName-core"
 
 val gdxVersion: String = project.property("gdx.version").toString()
+val ktxVersion: String = project.property("ktx.version").toString()
 val roboVMVersion: String = project.property("roboVM.version").toString()
 val gdxControllersVersion: String = project.property("gdx.controllers.version").toString()
 val box2dLightsVersion: String = project.property("box2d.lights.version").toString()
 val ashleyVersion: String = project.property("ashley.version").toString()
 val aiVersion: String = project.property("ai.version").toString()
 
+val tuningForkVersion = "4.2.0"
+val screenManagerVersion = "0.7.0"
+val shapeDrawerVersion = "2.5.0"
+val pieMenuVersion = "5.0.0"
+val textraTypistVersion = "0.10.0"
+val typingLabelVersion = "1.3.0"
+
+val jGraphTVersion = "1.5.2"
+
 val log4jVersion = "3.0.0-beta1"
 val lwjglVersion = "3.3.3"
 val gsonVersion = "2.10.1"
 val xmlVersion = "4.0.1"
 val kotlinVersion = "2.0.0-Beta2"
+val kotlinxCoroutinesVersion = "1.8.0-RC2"
 val lombokVersion = "1.18.30"
 
 val lwjglNatives = Pair(
@@ -92,6 +103,40 @@ dependencies {
     api("com.badlogicgames.ashley:ashley:$ashleyVersion")
     api("com.badlogicgames.gdx:gdx-ai:$aiVersion")
 
+    api("com.github.Hangman:TuningFork:$tuningForkVersion")
+    api("com.github.crykn:libgdx-screenmanager:$screenManagerVersion")
+    api("space.earlygrey:shapedrawer:$shapeDrawerVersion")
+    api("com.github.payne911:PieMenu:$pieMenuVersion")
+    api("com.github.tommyettinger:textratypist:$textraTypistVersion")
+    api("com.rafaskoberg.gdx:typing-label:$typingLabelVersion")
+
+    api("org.jgrapht:jgrapht-core:$jGraphTVersion")
+
+    api("io.github.libktx:ktx-actors:$ktxVersion")
+    api("io.github.libktx:ktx-ai:$ktxVersion")
+    api("io.github.libktx:ktx-app:$ktxVersion")
+    api("io.github.libktx:ktx-ashley:$ktxVersion")
+    api("io.github.libktx:ktx-assets-async:$ktxVersion")
+    api("io.github.libktx:ktx-assets:$ktxVersion")
+    api("io.github.libktx:ktx-async:$ktxVersion")
+    api("io.github.libktx:ktx-box2d:$ktxVersion")
+    api("io.github.libktx:ktx-collections:$ktxVersion")
+    api("io.github.libktx:ktx-freetype-async:$ktxVersion")
+    api("io.github.libktx:ktx-freetype:$ktxVersion")
+    api("io.github.libktx:ktx-graphics:$ktxVersion")
+    api("io.github.libktx:ktx-i18n:$ktxVersion")
+    api("io.github.libktx:ktx-inject:$ktxVersion")
+    api("io.github.libktx:ktx-json:$ktxVersion")
+    api("io.github.libktx:ktx-log:$ktxVersion")
+    api("io.github.libktx:ktx-math:$ktxVersion")
+    api("io.github.libktx:ktx-preferences:$ktxVersion")
+    api("io.github.libktx:ktx-reflect:$ktxVersion")
+    api("io.github.libktx:ktx-scene2d:$ktxVersion")
+    api("io.github.libktx:ktx-style:$ktxVersion")
+    api("io.github.libktx:ktx-tiled:$ktxVersion")
+    api("io.github.libktx:ktx-vis-style:$ktxVersion")
+    api("io.github.libktx:ktx-vis:$ktxVersion")
+
     api(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 
     api("org.lwjgl", "lwjgl")
@@ -106,6 +151,8 @@ dependencies {
     api(platform("org.jetbrains.kotlin:kotlin-bom"))
     api("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     api("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinxCoroutinesVersion")
 
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
