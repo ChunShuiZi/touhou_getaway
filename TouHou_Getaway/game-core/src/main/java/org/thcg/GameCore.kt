@@ -46,42 +46,33 @@ class GameCore : ApplicationAdapter() {
 
     }
 
-    fun handleFeedbackData(data: Int): Boolean {
+    fun handleFeedbackData(data: Int) {
         // 处理从输入处理器中传回的数据
         // 示例：打印数据
         if (data == UP_DOWN) {
             ySpeed += MOVE_STEP
-            return true
         }
         if (data == DOWN_DOWN) {
             ySpeed -= MOVE_STEP
-            return true
         }
         if (data == LEFT_DOWN) {
             xSpeed -= MOVE_STEP
-            return true
         }
         if (data == RIGHT_DOWN) {
             xSpeed += MOVE_STEP
-            return true
         }
         if (data == UP_RELEASE && y > 0 && y < Gdx.graphics.width) {
             ySpeed -= MOVE_STEP
-            return true
         }
         if (data == DOWN_RELEASE && y > 0 && y < Gdx.graphics.width) {
             ySpeed += MOVE_STEP
-            return true
         }
         if (data == LEFT_RELEASE && x > 0 && x < Gdx.graphics.width) {
             xSpeed += MOVE_STEP
-            return true
         }
         if (data == RIGHT_RELEASE && x > 0 && x < Gdx.graphics.width) {
             xSpeed -= MOVE_STEP
-            return true
         }
-        return false
     }
 
 }
