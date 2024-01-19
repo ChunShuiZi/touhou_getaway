@@ -1,9 +1,11 @@
-package org.thcg;
+package org.thcg.input;
 import com.badlogic.gdx.Input;
 
 import com.badlogic.gdx.InputProcessor;
+import org.thcg.GameCore;
+import org.thcg.util.GameConstant;
 
-public class MyInputProcessor implements InputProcessor {
+public class MyInputProcessor implements InputProcessor, GameConstant {
     private final GameCore game;
 
     public MyInputProcessor(GameCore game) {
@@ -14,28 +16,16 @@ public class MyInputProcessor implements InputProcessor {
     public boolean keyDown(int keycode) {
         // 处理键盘按下事件
         if(keycode == Input.Keys.W) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("1");
+            return game.handleFeedbackData(UP_DOWN);
         }
         if(keycode == Input.Keys.S) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("2");
+            return game.handleFeedbackData(DOWN_DOWN);
         }
         if(keycode == Input.Keys.A) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("3");
+            return game.handleFeedbackData(LEFT_DOWN);
         }
         if(keycode == Input.Keys.D) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("4");
+            return game.handleFeedbackData(RIGHT_DOWN);
         }
         return false;
     }
@@ -43,28 +33,16 @@ public class MyInputProcessor implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.W) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("5");
+            return game.handleFeedbackData(UP_RELEASE);
         }
         if(keycode == Input.Keys.S) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("6");
+            return game.handleFeedbackData(DOWN_RELEASE);
         }
         if(keycode == Input.Keys.A) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("7");
+            return game.handleFeedbackData(LEFT_RELEASE);
         }
         if(keycode == Input.Keys.D) {
-            // 在按下E键时执行的逻辑
-            // 对游戏内容产生反馈
-            // 示例：打印反馈信息
-            game.handleFeedbackData("8");
+            return game.handleFeedbackData(RIGHT_RELEASE);
         }
         // 处理键盘抬起事件
         return false;

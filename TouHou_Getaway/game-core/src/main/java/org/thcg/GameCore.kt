@@ -4,61 +4,84 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import org.thcg.input.MyInputProcessor
+import org.thcg.util.GameConstant.*
 
 
 class GameCore : ApplicationAdapter() {
-    private var inputProcessor: MyInputProcessor? = null
+    private lateinit var inputProcessor: MyInputProcessor
 
-    var x: Int = 300
-    var y: Int = 5
-    var xSpeed: Int = 0
-    var ySpeed: Int = 0
-    var shape: ShapeRenderer? = null
+    private var x: Int = 300
+    private var y: Int = 5
+    private var xSpeed: Int = 0
+    private var ySpeed: Int = 0
+    private lateinit var shape: ShapeRenderer
 
     override fun create() {
         shape = ShapeRenderer()
         inputProcessor = MyInputProcessor(this)
-        Gdx.input.setInputProcessor(inputProcessor);
+        Gdx.input.inputProcessor = inputProcessor
     }
+
     override fun render() {
-        Gdx.input.setInputProcessor(inputProcessor);
-
-
-
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        shape!!.begin(ShapeRenderer.ShapeType.Filled)
-        shape!!.circle(x.toFloat(), y.toFloat(), 10f)
-        shape!!.end()
-        x += xSpeed;
-        y += ySpeed;
+        shape.begin(ShapeRenderer.ShapeType.Filled)
+        shape.circle(x.toFloat(), y.toFloat(), 10f)
+        shape.end()
+        x += xSpeed
+        y += ySpeed
 
-        if (x >= Gdx.graphics.getWidth()) {
-            xSpeed = 0;
+        if (x >= Gdx.graphics.width) {
+            xSpeed = 0
         }
         if (x <= 0) {
-            xSpeed = 0;
+            xSpeed = 0
         }
-        if (y >= Gdx.graphics.getWidth()) {
-            ySpeed = 0;
+        if (y >= Gdx.graphics.width) {
+            ySpeed = 0
         }
         if (y <= 0) {
-            ySpeed = 0;
+            ySpeed = 0
         }
 
     }
-    fun handleFeedbackData(data: String) {
+
+    fun handleFeedbackData(data: Int): Boolean {
         // 处理从输入处理器中传回的数据
         // 示例：打印数据
-        var result = Integer.parseInt("$data");
-        if(result==1 ) ySpeed=ySpeed+5;
-        if(result==2 ) ySpeed=ySpeed-5;
-        if(result==3 ) xSpeed=xSpeed-5;
-        if(result==4 ) xSpeed=xSpeed+5;
-        if(result==5 && y>0 &&y < Gdx.graphics.getWidth()) ySpeed=ySpeed-5;
-        if(result==6 && y>0 &&y < Gdx.graphics.getWidth()) ySpeed=ySpeed+5;
-        if(result==7 && x>0 &&x < Gdx.graphics.getWidth()) xSpeed=xSpeed+5;
-        if(result==8 && x>0 &&x < Gdx.graphics.getWidth()) xSpeed=xSpeed-5;
-
+        if (data == UP_DOWN) {
+            ySpeed += MOVE_STEP
+            return true
+        }
+        if (data == DOWN_DOWN) {
+            ySpeed -= MOVE_STEP
+            return true
+        }
+        if (data == LEFT_DOWN) {
+            xSpeed -= MOVE_STEP
+            return true
+        }
+        if (data == RIGHT_DOWN) {
+            xSpeed += MOVE_STEP
+            return true
+        }
+        if (data == UP_RELEASE && y > 0 && y < Gdx.graphics.width) {
+            ySpeed -= MOVE_STEP
+            return true
+        }
+        if (data == DOWN_RELEASE && y > 0 && y < Gdx.graphics.width) {
+            ySpeed += MOVE_STEP
+            return true
+        }
+        if (data == LEFT_RELEASE && x > 0 && x < Gdx.graphics.width) {
+            xSpeed += MOVE_STEP
+            return true
+        }
+        if (data == RIGHT_RELEASE && x > 0 && x < Gdx.graphics.width) {
+            xSpeed -= MOVE_STEP
+            return true
+        }
+        return false
     }
 
 }
