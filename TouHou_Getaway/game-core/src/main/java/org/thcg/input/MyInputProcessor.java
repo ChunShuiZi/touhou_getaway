@@ -1,5 +1,6 @@
 package org.thcg.input;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import org.thcg.config.ConfigManager;
 import org.thcg.config.InputConfig;
@@ -55,7 +56,10 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("111");
+        if (button == Input.Buttons.LEFT) {
+            this.game.debugLocation();
+            return true;
+        }
         return false;
     }
 
