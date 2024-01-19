@@ -23,6 +23,7 @@ class GameCore : ManagedGame<ManagedScreen, ScreenTransition>() {
     }
 
     override fun dispose() {
+        _batch.dispose()
         Loader.terminal()
     }
 }
