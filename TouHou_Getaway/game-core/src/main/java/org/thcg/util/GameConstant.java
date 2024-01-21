@@ -10,6 +10,7 @@ public interface GameConstant {
     int DOWN = 0x01;
     int LEFT = 0x02;
     int RIGHT = 0x03;
+    int SHOT= 0x04;
     int MOVE_STEP = 4;
     // 物体大小
     int RADIUS = 8;
