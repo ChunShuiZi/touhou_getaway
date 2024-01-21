@@ -42,6 +42,11 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
             game.handleFeedbackData(RIGHT | type);
             return true;
         }
+
+        if(keycode == inputConfig.getShotKey()) {
+            game.handleFeedbackData(SHOT | type);
+            return true;
+        }
         return false;
     }
 

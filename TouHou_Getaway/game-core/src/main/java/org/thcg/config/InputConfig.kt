@@ -8,8 +8,9 @@ import com.badlogic.gdx.Input
  * @description
  */
 data class InputConfig(
-    var upKey: Int = Input.Keys.W,
-    var downKey: Int = Input.Keys.S,
-    var leftKey: Int = Input.Keys.A,
-    var rightKey: Int = Input.Keys.D
+    var upKey: Int = Input.Keys.UP,
+    var downKey: Int = Input.Keys.DOWN,
+    var leftKey: Int = Input.Keys.LEFT,
+    var rightKey: Int = Input.Keys.RIGHT,
+    var shotKey: Int = Input.Keys.Z,
 )
