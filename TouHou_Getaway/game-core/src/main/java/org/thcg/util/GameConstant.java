@@ -17,5 +17,15 @@ public interface GameConstant {
     int TOP_BLANK_HEIGHT = 0;
     int SCORE = 1;
     String USER_FILE_PATH = "game.assets.userdata";
-
+    String GAME_MODE_EASY = "Easy";
+    String GAME_MODE_NORMAL = "Normal";
+    String GAME_MODE_HARD = "Hard";
+    String GAME_MODE_EXPERT = "Expert";
+    String[] GAME_MODE = {
+            GAME_MODE_EASY,
+            GAME_MODE_NORMAL,
+            GAME_MODE_HARD,
+            GAME_MODE_EXPERT
+    };
+    String DEFAULT_USER_NAME = "Player";
 }

@@ -1,17 +1,23 @@
 package org.thcg.core;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import org.thcg.core.UserRecord;
+
+import static org.thcg.util.GameConstant.*;
+
 public class User {
     public String userName;
-    public File userRecord;
+    public File userRecordFile;
+    public String gameMode;
     public User(){
-        this.userName = "Player";
+        this.userName = DEFAULT_USER_NAME;
+        UserRecord userRecord1 = new UserRecord();
+        this.userRecordFile = userRecord1.recordFile;
+        this.gameMode = GAME_MODE_EASY;
     }
-    public User(String Username){
-        this.userName = Username;
+    public User(String username){
+        this.userName = username;
+        UserRecord userRecord1 = new UserRecord(username);
+        this.userRecordFile = userRecord1.recordFile;
+        this.gameMode = GAME_MODE_EASY;
     }
 }
