@@ -30,6 +30,7 @@ class GameScreen : ManagedScreenAdapter() {
     private var shape: ShapeRenderer = ShapeRenderer()
     private var viewport: ScreenViewport = ScreenViewport()
 
+    private var shotting : Int =0
     init {
         addInputProcessor(inputProcessor)
     }
@@ -39,6 +40,12 @@ class GameScreen : ManagedScreenAdapter() {
         shape.projectionMatrix = viewport.camera.combined
         shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.circle(x.toFloat(), y.toFloat(), RADIUS.toFloat())
+
+        if(shotting==1)
+        {
+
+        }
+
         val color = Color.RED
         shape.color = color
         shape.end()
@@ -86,6 +93,14 @@ class GameScreen : ManagedScreenAdapter() {
 
             RIGHT or Type.RELEASE -> {
                 xSpeed -= MOVE_STEP
+            }
+
+            SHOT or Type.DOWN -> {
+                shotting=1
+            }
+
+            SHOT or Type.RELEASE -> {
+                shotting=0
             }
         }
     }
