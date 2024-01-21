@@ -43,7 +43,7 @@ class GameScreen : ManagedScreenAdapter() {
 
         if(shotting==1)
         {
-
+            print("0")
         }
 
         val color = Color.RED
