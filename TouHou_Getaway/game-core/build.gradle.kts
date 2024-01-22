@@ -56,8 +56,8 @@ val jGraphTVersion = "1.5.2"
 
 val log4jVersion = "3.0.0-beta1"
 val lwjglVersion = "3.3.3"
-val gsonVersion = "2.10.1"
-val xmlVersion = "4.0.1"
+val jacksonVersion = "2.16.1"
+val msgPackVersion = "0.9.7"
 val configVersion = "1.4.3"
 val config4kVersion = "0.6.0"
 val kotlinVersion = "2.0.0-Beta2"
@@ -94,8 +94,13 @@ dependencies {
     api("org.apache.logging.log4j:log4j-core:$log4jVersion")
     api("org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion")
 
-    api("com.google.code.gson:gson:$gsonVersion")
-    api("jakarta.xml.bind:jakarta.xml.bind-api:$xmlVersion")
+    api("org.msgpack:msgpack-core:$msgPackVersion")
+
+    api("com.fasterxml.jackson:jackson-bom:$jacksonVersion")
+    api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+    api("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
+    api("com.fasterxml.jackson.dataformat:jackson-dataformat-properties:$jacksonVersion")
+    api("org.msgpack:jackson-dataformat-msgpack:$msgPackVersion")
 
     api("com.typesafe:config:$configVersion")
     api("io.github.config4k:config4k:$config4kVersion")
