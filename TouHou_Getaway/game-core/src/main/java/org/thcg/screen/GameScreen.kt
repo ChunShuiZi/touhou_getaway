@@ -8,7 +8,9 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.thcg.input.MyInputProcessor
 import org.thcg.input.MyInputProcessor.Type
+import org.thcg.shot.bullet
 import org.thcg.util.GameConstant.*
+
 
 /**
  * @author Severle
@@ -30,7 +32,6 @@ class GameScreen : ManagedScreenAdapter() {
     private var shape: ShapeRenderer = ShapeRenderer()
     private var viewport: ScreenViewport = ScreenViewport()
 
-    private var shotting : Int =0
     init {
         addInputProcessor(inputProcessor)
     }
@@ -40,11 +41,6 @@ class GameScreen : ManagedScreenAdapter() {
         shape.projectionMatrix = viewport.camera.combined
         shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.circle(x.toFloat(), y.toFloat(), RADIUS.toFloat())
-
-        if(shotting==1)
-        {
-            print("0")
-        }
 
         val color = Color.RED
         shape.color = color
@@ -96,11 +92,18 @@ class GameScreen : ManagedScreenAdapter() {
             }
 
             SHOT or Type.DOWN -> {
-                shotting=1
+
+                shape.begin(ShapeRenderer.ShapeType.Filled)
+                 var bullet=bullet(x,y,1,1)
+                 bullet.update()
+                 bullet.draw(shape)
+                shape.end()
+
             }
 
             SHOT or Type.RELEASE -> {
-                shotting=0
+
+
             }
         }
     }

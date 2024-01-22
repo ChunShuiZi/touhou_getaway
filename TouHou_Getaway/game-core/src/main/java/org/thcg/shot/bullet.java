@@ -29,7 +29,6 @@ public class bullet {
         y += ySpeed;
     }
     public void draw(ShapeRenderer shape) {
-        update();
         shape.circle(x, y, size);
     }
 }
