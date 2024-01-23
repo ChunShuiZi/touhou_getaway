@@ -103,7 +103,7 @@ public class UserRecord extends User{
             if (!lines.isEmpty()) {
                 String pattern = "(\\d+)";//正则表达式匹配每一行“-”前的数字
                 Pattern r = Pattern.compile(pattern);
-                String lastLine = lines.getLast();
+                String lastLine = lines.get(lines.size() - 1);
                 Matcher m = r.matcher(lastLine);
 
                 userRecord.newRecord = Integer.parseInt(m.group(0));//将匹配到的数字赋值给newRecord
