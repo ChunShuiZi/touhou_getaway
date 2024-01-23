@@ -5,7 +5,7 @@ import java.io.File;
 import static org.thcg.util.GameConstant.*;
 
 public class User {
-    public String userName;
+    public final String userName;
     public File userRecordFile;
     public String gameMode;
     public User(){

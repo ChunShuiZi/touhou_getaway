@@ -16,7 +16,6 @@ public interface GameConstant {
     int RADIUS = 8;
     // 顶部距离屏幕最上方的不可进入的空余空间
     int TOP_BLANK_HEIGHT = 0;
-    int SCORE = 1;
     String USER_FILE_PATH = "game.assets.userdata";
     String GAME_MODE_EASY = "Easy";
     String GAME_MODE_NORMAL = "Normal";

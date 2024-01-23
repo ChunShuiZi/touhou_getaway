@@ -1,7 +1,10 @@
 package org.thcg.screen
-import com.badlogic.gdx.utils.Array
+
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.GlyphLayout
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import de.eskalon.commons.screen.ManagedScreenAdapter
@@ -10,7 +13,6 @@ import org.apache.logging.log4j.Logger
 import org.thcg.input.MyInputProcessor
 import org.thcg.input.MyInputProcessor.Type
 import org.thcg.util.GameConstant.*
-
 
 /**
  * @author Severle
@@ -27,85 +29,117 @@ class GameScreen : ManagedScreenAdapter() {
     private var bullets: MutableList<Bullet> = mutableListOf()  // 用于存储子弹对象的列表
     private var shot: Int = 0
     // 初始化人物位置
-    private var x: Int = 300// 人物横坐标
-    private var y: Int = 8// 人物纵坐标
-    private var xSpeed: Int = 0// 人物横向速度
-    private var ySpeed: Int = 0// 人物纵向速度
+    private var playerPositionX: Int = 300// 人物横坐标
+    private var playerPositionY: Int = 8// 人物纵坐标
+    private var playerSpeedX: Int = 0// 人物横向速度
+    private var playerSpeedY: Int = 0// 人物纵向速度
+    private val scoreBoardPositionX: Int = 10//得分板横坐标
+    private val scoreBoardPositionY: Int = 420//得分板纵坐标
     private var shape: ShapeRenderer = ShapeRenderer() // 创建ShapeRenderer对象，用于绘制形状
     private var viewport: ScreenViewport = ScreenViewport()// 创建ScreenViewport对象，用于处理屏幕显示区域
+    private val userColor = Color.RED // 设置绘制颜色为红色
+    private val bulletColor1 = Color.WHITE // 设置绘制颜色为红色
+    private var score = 1
 
     init {
         addInputProcessor(inputProcessor)// 添加输入处理器到当前屏幕
     }
 
-    override fun render(delta: Float) {
-        viewport.apply()// 应用视图口设置
+    private fun userShapeInitialize(){
         shape.projectionMatrix = viewport.camera.combined // 设置ShapeRenderer的投影矩阵为视图口相机的组合矩阵
         shape.begin(ShapeRenderer.ShapeType.Filled)// 开始填充形状绘制
-        shape.circle(x.toFloat(), y.toFloat(), RADIUS.toFloat())// 绘制一个圆形
-
-        val color = Color.RED // 设置绘制颜色为红色
-        shape.color = color // 设置ShapeRenderer的绘制颜色
+        shape.circle(playerPositionX.toFloat(), playerPositionY.toFloat(), RADIUS.toFloat())// 绘制一个圆形
+        shape.color = userColor
         shape.end()// 结束形状绘制
-        x += xSpeed// 更新人物横坐标
-        y += ySpeed // 更新人物纵坐标
-        if (x >= viewport.worldWidth - RADIUS)
-            x = viewport.worldWidth.toInt() - RADIUS
-        if (y >= viewport.worldHeight - RADIUS - TOP_BLANK_HEIGHT)
-            y = viewport.worldHeight.toInt() - RADIUS - TOP_BLANK_HEIGHT
-        if (x <= RADIUS)
-            x = RADIUS
-        if (y <= RADIUS)
-            y = RADIUS
-if(shot==1) {
-    bullets.add(Bullet(x, y, 5, 1))
-}
-    // 移除已过期的子弹并更新和绘制子弹
-    bullets.removeAll { bullet -> bullet.isExpired() }
-    shape.begin(ShapeRenderer.ShapeType.Filled)
-    for (bullet in bullets) {
-        val color2 = Color.WHITE // 设置绘制颜色为红色
-        shape.color = color2
-        bullet.update(delta)
-        bullet.draw(shape)
-        shape.color = color
     }
 
+    private fun userPositionUpdate(){
+        playerPositionX += playerSpeedX// 更新人物横坐标
+        playerPositionY += playerSpeedY // 更新人物纵坐标
+        if (playerPositionX >= viewport.worldWidth - RADIUS)
+            playerPositionX = viewport.worldWidth.toInt() - RADIUS
+        if (playerPositionY >= viewport.worldHeight - RADIUS - TOP_BLANK_HEIGHT)
+            playerPositionY = viewport.worldHeight.toInt() - RADIUS - TOP_BLANK_HEIGHT
+        if (playerPositionX <= RADIUS)
+            playerPositionX = RADIUS
+        if (playerPositionY <= RADIUS)
+            playerPositionY = RADIUS
+    }
+
+    private fun userShotBullets(delta: Float){
+        if(shot==1) { bullets.add(Bullet(playerPositionX, playerPositionY, 5, 1)) }
+        // 移除已过期的子弹并更新和绘制子弹
+        bullets.removeAll { bullet -> bullet.isExpired() }
+
+        shape.begin(ShapeRenderer.ShapeType.Filled)
+
+        for (bullet in bullets) {
+            shape.color = bulletColor1
+            bullet.update(delta)
+            bullet.draw(shape)
+            shape.color = userColor
+        }
         shape.end()
+    }
+
+    private fun scoreBoardDraw(){
+        val font = BitmapFont()
+        val batch = SpriteBatch()
+        val glyphLayout = GlyphLayout()
+        val message = "Score:$score"
+        glyphLayout.setText(font, message)
+        batch.begin()
+        font.draw(batch, glyphLayout, (scoreBoardPositionX).toFloat(),(scoreBoardPositionY).toFloat())
+        score = updateScore(score)
+        batch.end()
+    }
+
+    private fun updateScore(sc: Int) : Int{
+        //更新得分，可以在以后改成击落敌机得分
+        var sc = score + 1
+        return sc
+    }
+
+    override fun render(delta: Float) {
+        viewport.apply()// 应用视图口设置
+        userShapeInitialize()//自机渲染初始化
+        userPositionUpdate()//自机位置更新
+        userShotBullets(delta)//自机射击子弹
+        scoreBoardDraw()//渲染得分
     }
 
     fun handleFeedbackData(data: Int) {
         when (data) {
             UP or Type.DOWN -> {
-                ySpeed += MOVE_STEP
+                playerSpeedY += MOVE_STEP
             }
 
             DOWN or Type.DOWN -> {
-                ySpeed -= MOVE_STEP
+                playerSpeedY -= MOVE_STEP
             }
 
             LEFT or Type.DOWN -> {
-                xSpeed -= MOVE_STEP
+                playerSpeedX -= MOVE_STEP
             }
 
             RIGHT or Type.DOWN -> {
-                xSpeed += MOVE_STEP
+                playerSpeedX += MOVE_STEP
             }
 
             UP or Type.RELEASE -> {
-                ySpeed -= MOVE_STEP
+                playerSpeedY -= MOVE_STEP
             }
 
             DOWN or Type.RELEASE -> {
-                ySpeed += MOVE_STEP
+                playerSpeedY += MOVE_STEP
             }
 
             LEFT or Type.RELEASE -> {
-                xSpeed += MOVE_STEP
+                playerSpeedX += MOVE_STEP
             }
 
             RIGHT or Type.RELEASE -> {
-                xSpeed -= MOVE_STEP
+                playerSpeedX -= MOVE_STEP
             }
             SHOT or Type.DOWN -> {
                 shot=1
@@ -113,7 +147,7 @@ if(shot==1) {
             }
 
             SHOT or Type.RELEASE -> {
-shot=0
+                shot=0
 
             }
         }
@@ -121,7 +155,7 @@ shot=0
 
     fun debugLocation() {
         if (log.isDebugEnabled) {
-            log.debug("Now Location: ({}, {})", x, y)
+            log.debug("Now Location: ({}, {})", playerPositionX, playerPositionY)
         }
     }
 
@@ -131,38 +165,5 @@ shot=0
 
     override fun dispose() {
         shape.dispose()
-    }
-}
-class Bullet(
-    private val x: Int,
-    private var y: Int,
-    private val size: Int,
-    private val bulletType: Int
-) {
-    private var distanceTraveled: Int = 0
-    private val maxDistance: Int = 5000
-
-    fun update(delta: Float) {
-        val speed: Float = 2000f
-        val oldY: Int = y
-
-        when (bulletType) {
-            // 处理不同类型的子弹移动逻辑
-            // ...
-
-            else -> {
-                y += (speed * delta).toInt()
-            }
-        }
-
-        distanceTraveled += (y - oldY)
-    }
-
-    fun draw(shape: ShapeRenderer) {
-        shape.circle(x.toFloat(), y.toFloat(), size.toFloat())
-    }
-
-    fun isExpired(): Boolean {
-        return distanceTraveled >= maxDistance
     }
 }

@@ -119,9 +119,9 @@ public class UserRecord extends User{
         }
     }
     //每次游戏结束调用，判断游戏分数是否为新纪录
-    public int isNewRecord(UserRecord userRecord, int gameMode){
+    public int isNewRecord(UserRecord userRecord, int gameMode, int score){
         getUserScore(userRecord, gameMode);//读取最新的记录
-        if(SCORE > userRecord.newRecord){
+        if(score > userRecord.newRecord){
             return True;
         }
         else {
