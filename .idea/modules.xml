@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TouHou_Getaway.iml" filepath="$PROJECT_DIR$/.idea/modules/TouHou_Getaway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/game-core/TouHou_Getaway.game-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/game-core/TouHou_Getaway.game-core.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/game-desktop/TouHou_Getaway.game-desktop.main.iml" filepath="$PROJECT_DIR$/.idea/modules/game-desktop/TouHou_Getaway.game-desktop.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/getaway.iml" filepath="$PROJECT_DIR$/.idea/getaway.iml" />
     </modules>
