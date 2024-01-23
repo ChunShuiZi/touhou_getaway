@@ -35,8 +35,7 @@ public class UserRecord extends User{
                 FileWriter fw = new FileWriter(recordFileChecker);
                 BufferedWriter bw = new BufferedWriter(fw);
 
-                bw.write(DEFAULT_USER_NAME);
-                bw.write("\n");
+                bw.write(DEFAULT_USER_NAME + "\n");
 
                 bw.close();
                 fw.close();
