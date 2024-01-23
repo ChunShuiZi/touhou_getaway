@@ -45,7 +45,7 @@ val box2dLightsVersion: String = project.property("box2d.lights.version").toStri
 val ashleyVersion: String = project.property("ashley.version").toString()
 val aiVersion: String = project.property("ai.version").toString()
 
-val tuningForkVersion = "4.2.0"
+val tuningForkVersion = "4.2.1"
 val screenManagerVersion = "0.7.0"
 val shapeDrawerVersion = "2.5.0"
 val pieMenuVersion = "5.0.0"
