@@ -1,6 +1,6 @@
 ### 《東方逍遥鎭~TouHou Getaway》  
-这里是原创同人游戏《東方逍遥鎭\~TouHouGetaway》的程序部分！  
-《東方逍遥鎭\~TouHouGetaway》是一款 [ 弹幕射击游戏 ] 。  
+这里是原创同人游戏《東方逍遥鎭\~TouHou Getaway》的程序部分！  
+《東方逍遥鎭\~TouHou Getaway》是一款 [ 弹幕射击游戏 ] 。  
 ****
 没有严格的代码规范，但是请注意以下NOTICE：  
 ① 在push之前，请确保新增的内容可以完成运行。   
