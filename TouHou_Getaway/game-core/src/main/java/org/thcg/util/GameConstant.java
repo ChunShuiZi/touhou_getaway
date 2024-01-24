@@ -10,8 +10,10 @@ public interface GameConstant {
     int DOWN = 0x01;
     int LEFT = 0x02;
     int RIGHT = 0x03;
-    int SHOT= 0x04;
+    int SHOT = 0x04;
+    int SLOW = 0x05;
     int MOVE_STEP = 4;
+    int SLOW_STEP = 2;
     // 物体大小
     int RADIUS = 8;
     // 顶部距离屏幕最上方的不可进入的空余空间

@@ -39,7 +39,13 @@ class GameScreen : ManagedScreenAdapter() {
     private var viewport: ScreenViewport = ScreenViewport()// 创建ScreenViewport对象，用于处理屏幕显示区域
     private val userColor = Color.RED // 设置绘制颜色为红色
     private val bulletColor1 = Color.WHITE // 设置绘制颜色为红色
+    private var slow = 0
     private var score = 1
+
+    private var upF = -1
+    private var downF = -1
+    private var leftF = -1
+    private var rightF = -1
 
     init {
         addInputProcessor(inputProcessor)// 添加输入处理器到当前屏幕
@@ -111,44 +117,86 @@ class GameScreen : ManagedScreenAdapter() {
     fun handleFeedbackData(data: Int) {
         when (data) {
             UP or Type.DOWN -> {
-                playerSpeedY += MOVE_STEP
+                if (slow==0)
+                {playerSpeedY += MOVE_STEP
+                    upF=0}
+                else
+                {playerSpeedY += SLOW_STEP
+                    upF=1}
             }
 
             DOWN or Type.DOWN -> {
-                playerSpeedY -= MOVE_STEP
+                if (slow==0)
+                {playerSpeedY -= MOVE_STEP
+                    downF=0}
+                else
+                {playerSpeedY -= SLOW_STEP
+                    downF=1}
             }
 
             LEFT or Type.DOWN -> {
-                playerSpeedX -= MOVE_STEP
+                if (slow==0)
+                {playerSpeedX -= MOVE_STEP
+                    leftF=0}
+                else
+                {playerSpeedX -= SLOW_STEP
+                     leftF=1}
             }
 
             RIGHT or Type.DOWN -> {
-                playerSpeedX += MOVE_STEP
+                if (slow==0)
+                {playerSpeedX += MOVE_STEP
+                    rightF=0}
+                else
+                {playerSpeedX += SLOW_STEP
+                    rightF=1}
             }
 
             UP or Type.RELEASE -> {
+                if (upF==0)
                 playerSpeedY -= MOVE_STEP
+                if (upF==1)
+                playerSpeedY -= SLOW_STEP
+                upF == -1
             }
 
             DOWN or Type.RELEASE -> {
+                if (downF==0)
                 playerSpeedY += MOVE_STEP
+                if (downF==1)
+                playerSpeedY += SLOW_STEP
+                downF == -1
             }
 
             LEFT or Type.RELEASE -> {
+                if (leftF==0)
                 playerSpeedX += MOVE_STEP
+                if (leftF==1)
+                playerSpeedX += SLOW_STEP
+                leftF == -1
             }
 
             RIGHT or Type.RELEASE -> {
+                if (rightF==0)
                 playerSpeedX -= MOVE_STEP
+                if (rightF==1)
+                playerSpeedX -= SLOW_STEP
+                rightF == -1
             }
+
             SHOT or Type.DOWN -> {
                 shot=1
-
             }
 
             SHOT or Type.RELEASE -> {
                 shot=0
+            }
 
+            SLOW or Type.DOWN -> {
+                slow=1
+            }
+            SLOW or Type.RELEASE -> {
+                slow=0
             }
         }
     }

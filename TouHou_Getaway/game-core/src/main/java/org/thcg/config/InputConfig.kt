@@ -13,4 +13,5 @@ data class InputConfig(
     var leftKey: Int = Input.Keys.LEFT,
     var rightKey: Int = Input.Keys.RIGHT,
     var shotKey: Int = Input.Keys.Z,
+    var slowKey: Int = Input.Keys.SHIFT_LEFT,
 )

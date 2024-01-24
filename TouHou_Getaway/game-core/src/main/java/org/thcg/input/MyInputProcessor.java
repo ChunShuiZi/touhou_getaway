@@ -47,6 +47,11 @@ public class MyInputProcessor implements InputProcessor, GameConstant {
             game.handleFeedbackData(SHOT | type);
             return true;
         }
+
+        if(keycode == inputConfig.getSlowKey()) {
+            game.handleFeedbackData(SLOW | type);
+            return true;
+        }
         return false;
     }
 

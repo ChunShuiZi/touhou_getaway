@@ -12,7 +12,7 @@ class Bullet(
     private val maxDistance: Int = 5000
 
     fun update(delta: Float) {
-        val speed: Float = 2000f
+        val speed: Float = 1200f
         val oldY: Int = y
 
         when (bulletType) {
