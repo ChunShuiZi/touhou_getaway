@@ -157,7 +157,7 @@ class GameScreen : ManagedScreenAdapter() {
                 playerSpeedY -= MOVE_STEP
                 if (upF==1)
                 playerSpeedY -= SLOW_STEP
-                upF == -1
+                upF = -1
             }
 
             DOWN or Type.RELEASE -> {
@@ -165,7 +165,7 @@ class GameScreen : ManagedScreenAdapter() {
                 playerSpeedY += MOVE_STEP
                 if (downF==1)
                 playerSpeedY += SLOW_STEP
-                downF == -1
+                downF = -1
             }
 
             LEFT or Type.RELEASE -> {
@@ -173,7 +173,7 @@ class GameScreen : ManagedScreenAdapter() {
                 playerSpeedX += MOVE_STEP
                 if (leftF==1)
                 playerSpeedX += SLOW_STEP
-                leftF == -1
+                leftF = -1
             }
 
             RIGHT or Type.RELEASE -> {
@@ -181,7 +181,7 @@ class GameScreen : ManagedScreenAdapter() {
                 playerSpeedX -= MOVE_STEP
                 if (rightF==1)
                 playerSpeedX -= SLOW_STEP
-                rightF == -1
+                rightF = -1
             }
 
             SHOT or Type.DOWN -> {
