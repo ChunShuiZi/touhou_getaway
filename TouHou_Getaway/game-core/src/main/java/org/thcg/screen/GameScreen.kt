@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import de.eskalon.commons.screen.ManagedScreenAdapter
 import org.apache.logging.log4j.LogManager
@@ -23,10 +24,19 @@ class GameScreen : ManagedScreenAdapter() {
     private companion object {
         private val log: Logger = LogManager.getLogger(GameScreen::class.java)// 创建Logger对象，用于日志记录
 
+        private val ENEMY_COLOR: Color = Color.BLUE
+        private val ENEMY_SPAWN_CHANCE: Float = 0.05f
+        private val MIN_ENEMY_SPEED_Y: Float = 75f
+        private val MAX_ENEMY_SPEED_Y: Float = 125f
+        private val ENEMY_WIDTH: Float = 25f
+        private val ENEMY_HEIGHT: Float = 25f
     }
 
     private var inputProcessor: MyInputProcessor = MyInputProcessor(this)// 创建MyInputProcessor对象，并传入当前实例
     private var bullets: MutableList<Bullet> = mutableListOf()  // 用于存储子弹对象的列表
+
+    private var enemies: MutableList<Enemy> = mutableListOf() // 用于存储敌机对象的列表
+
     private var shot: Int = 0
     // 初始化人物位置
     private var playerPositionX: Int = 300// 人物横坐标
@@ -75,7 +85,15 @@ class GameScreen : ManagedScreenAdapter() {
     private fun userShotBullets(delta: Float){
         if(shot==1) { bullets.add(Bullet(playerPositionX, playerPositionY, 5, 1)) }
         // 移除已过期的子弹并更新和绘制子弹
-        bullets.removeAll { bullet -> bullet.isExpired() }
+        bullets.removeAll { bullet ->
+            val hitEnemy = enemies.find { enemy -> enemy.isHitByBullet(bullet) }
+            if (hitEnemy != null) {
+                enemies.remove(hitEnemy)
+                true
+            } else {
+                bullet.isExpired()
+            }
+        }
 
         shape.begin(ShapeRenderer.ShapeType.Filled)
 
@@ -112,6 +130,29 @@ class GameScreen : ManagedScreenAdapter() {
         userPositionUpdate()//自机位置更新
         userShotBullets(delta)//自机射击子弹
         scoreBoardDraw()//渲染得分
+
+        // 生成随机敌机
+        if (MathUtils.randomBoolean(ENEMY_SPAWN_CHANCE)) {
+            val enemyX = MathUtils.random(viewport.worldWidth.toFloat() - ENEMY_WIDTH)
+            val enemyY = viewport.worldHeight
+            val enemySpeedY = MathUtils.random(MIN_ENEMY_SPEED_Y, MAX_ENEMY_SPEED_Y)
+            enemies.add(Enemy(enemyX, enemyY, ENEMY_WIDTH, ENEMY_HEIGHT, enemySpeedY))
+        }
+
+        // 移除已经飞出屏幕的敌机
+        enemies.removeAll { enemy -> enemy.isOutOfScreen(viewport.worldHeight) }
+
+        shape.begin(ShapeRenderer.ShapeType.Filled)
+        shape.color = ENEMY_COLOR
+
+        for (enemy in enemies) {
+            enemy.update(delta)
+            enemy.draw(shape)
+        }
+        shape.color = Color.RED
+        shape.end()
+
+
     }
 
     fun handleFeedbackData(data: Int) {
@@ -185,18 +226,18 @@ class GameScreen : ManagedScreenAdapter() {
             }
 
             SHOT or Type.DOWN -> {
-                shot=1
+                shot = 1
             }
 
             SHOT or Type.RELEASE -> {
-                shot=0
+                shot = 0
             }
 
             SLOW or Type.DOWN -> {
-                slow=1
+                slow = 1
             }
             SLOW or Type.RELEASE -> {
-                slow=0
+                slow = 0
             }
         }
     }
@@ -213,5 +254,34 @@ class GameScreen : ManagedScreenAdapter() {
 
     override fun dispose() {
         shape.dispose()
+    }
+}
+
+class Enemy(
+    private val x: Float,
+    private var y: Float,
+    private val width: Float,
+    private val height: Float,
+    private val speedY: Float
+) {
+    companion object {
+        private val ENEMY_COLOR: Color = Color.BLUE
+    }
+
+    fun update(delta: Float) {
+        y -= speedY * delta
+    }
+
+    fun draw(shapeRenderer: ShapeRenderer) {
+        shapeRenderer.color = ENEMY_COLOR
+        shapeRenderer.rect(x, y, width, height)
+    }
+
+    fun isOutOfScreen(screenHeight: Float): Boolean {
+        return y + height < 0f
+    }
+
+    fun isHitByBullet(bullet: Bullet): Boolean {
+        return bullet.x >= x && bullet.x <= x + width && bullet.y >= y && bullet.y <= y + height
     }
 }

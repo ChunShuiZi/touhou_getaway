@@ -3,8 +3,8 @@ package org.thcg.screen
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 class Bullet(
-    private val x: Int,
-    private var y: Int,
+    val x: Int,
+    var y: Int,
     private val size: Int,
     private val bulletType: Int
 ) {
