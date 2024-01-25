@@ -50,7 +50,8 @@ class GameScreen : ManagedScreenAdapter() {
     private val userColor = Color.RED // 设置绘制颜色为红色
     private val bulletColor1 = Color.WHITE // 设置绘制颜色为红色
     private var slow = 0
-    private var score = 1
+    private var score = 0
+    private val bonusPoint = 1
 
     private var upF = -1
     private var downF = -1
@@ -61,98 +62,17 @@ class GameScreen : ManagedScreenAdapter() {
         addInputProcessor(inputProcessor)// 添加输入处理器到当前屏幕
     }
 
-    private fun userShapeInitialize(){
-        shape.projectionMatrix = viewport.camera.combined // 设置ShapeRenderer的投影矩阵为视图口相机的组合矩阵
-        shape.begin(ShapeRenderer.ShapeType.Filled)// 开始填充形状绘制
-        shape.circle(playerPositionX.toFloat(), playerPositionY.toFloat(), RADIUS.toFloat())// 绘制一个圆形
-        shape.color = userColor
-        shape.end()// 结束形状绘制
-    }
-
-    private fun userPositionUpdate(){
-        playerPositionX += playerSpeedX// 更新人物横坐标
-        playerPositionY += playerSpeedY // 更新人物纵坐标
-        if (playerPositionX >= viewport.worldWidth - RADIUS)
-            playerPositionX = viewport.worldWidth.toInt() - RADIUS
-        if (playerPositionY >= viewport.worldHeight - RADIUS - TOP_BLANK_HEIGHT)
-            playerPositionY = viewport.worldHeight.toInt() - RADIUS - TOP_BLANK_HEIGHT
-        if (playerPositionX <= RADIUS)
-            playerPositionX = RADIUS
-        if (playerPositionY <= RADIUS)
-            playerPositionY = RADIUS
-    }
-
-    private fun userShotBullets(delta: Float){
-        if(shot==1) { bullets.add(Bullet(playerPositionX, playerPositionY, 5, 1)) }
-        // 移除已过期的子弹并更新和绘制子弹
-        bullets.removeAll { bullet ->
-            val hitEnemy = enemies.find { enemy -> enemy.isHitByBullet(bullet) }
-            if (hitEnemy != null) {
-                enemies.remove(hitEnemy)
-                true
-            } else {
-                bullet.isExpired()
-            }
-        }
-
-        shape.begin(ShapeRenderer.ShapeType.Filled)
-
-        for (bullet in bullets) {
-            shape.color = bulletColor1
-            bullet.update(delta)
-            bullet.draw(shape)
-            shape.color = userColor
-        }
-        shape.end()
-    }
-
-    private fun scoreBoardDraw(){
-        val font = BitmapFont()
-        val batch = SpriteBatch()
-        val glyphLayout = GlyphLayout()
-        val message = "Score:$score"
-        glyphLayout.setText(font, message)
-        batch.begin()
-        font.draw(batch, glyphLayout, (scoreBoardPositionX).toFloat(),(scoreBoardPositionY).toFloat())
-        score = updateScore(score)
-        batch.end()
-    }
-
-    private fun updateScore(sc: Int) : Int{
-        //更新得分，可以在以后改成击落敌机得分
-        var sc = score + 1
-        return sc
-    }
-
     override fun render(delta: Float) {
         viewport.apply()// 应用视图口设置
         userShapeInitialize()//自机渲染初始化
         userPositionUpdate()//自机位置更新
         userShotBullets(delta)//自机射击子弹
         scoreBoardDraw()//渲染得分
+        enemyRandomGenerate() // 生成随机敌机
+        enemyRemove(delta) // 移除已经飞出屏幕的敌机
 
-        // 生成随机敌机
-        if (MathUtils.randomBoolean(ENEMY_SPAWN_CHANCE)) {
-            val enemyX = MathUtils.random(viewport.worldWidth.toFloat() - ENEMY_WIDTH)
-            val enemyY = viewport.worldHeight
-            val enemySpeedY = MathUtils.random(MIN_ENEMY_SPEED_Y, MAX_ENEMY_SPEED_Y)
-            enemies.add(Enemy(enemyX, enemyY, ENEMY_WIDTH, ENEMY_HEIGHT, enemySpeedY))
-        }
-
-        // 移除已经飞出屏幕的敌机
-        enemies.removeAll { enemy -> enemy.isOutOfScreen(viewport.worldHeight) }
-
-        shape.begin(ShapeRenderer.ShapeType.Filled)
-        shape.color = ENEMY_COLOR
-
-        for (enemy in enemies) {
-            enemy.update(delta)
-            enemy.draw(shape)
-        }
         shape.color = Color.RED
         shape.end()
-
-
     }
 
     fun handleFeedbackData(data: Int) {
@@ -255,33 +175,87 @@ class GameScreen : ManagedScreenAdapter() {
     override fun dispose() {
         shape.dispose()
     }
+
+    private fun userShapeInitialize(){
+        shape.projectionMatrix = viewport.camera.combined // 设置ShapeRenderer的投影矩阵为视图口相机的组合矩阵
+        shape.begin(ShapeRenderer.ShapeType.Filled)// 开始填充形状绘制
+        shape.circle(playerPositionX.toFloat(), playerPositionY.toFloat(), RADIUS.toFloat())// 绘制一个圆形
+        shape.color = userColor
+        shape.end()// 结束形状绘制
+    }
+
+    private fun userPositionUpdate(){
+        playerPositionX += playerSpeedX// 更新人物横坐标
+        playerPositionY += playerSpeedY // 更新人物纵坐标
+        if (playerPositionX >= viewport.worldWidth - RADIUS)
+            playerPositionX = viewport.worldWidth.toInt() - RADIUS
+        if (playerPositionY >= viewport.worldHeight - RADIUS - TOP_BLANK_HEIGHT)
+            playerPositionY = viewport.worldHeight.toInt() - RADIUS - TOP_BLANK_HEIGHT
+        if (playerPositionX <= RADIUS)
+            playerPositionX = RADIUS
+        if (playerPositionY <= RADIUS)
+            playerPositionY = RADIUS
+    }
+
+    private fun userShotBullets(delta: Float){
+        if(shot==1) { bullets.add(Bullet(playerPositionX, playerPositionY, 5, 1)) }
+        // 移除已过期的子弹并更新和绘制子弹
+        bullets.removeAll { bullet ->
+            val hitEnemy = enemies.find { enemy -> enemy.isHitByBullet(bullet) }
+            if (hitEnemy != null) {
+                enemies.remove(hitEnemy)
+                score = updateScore(score)
+                true
+            } else {
+                bullet.isExpired()
+            }
+        }
+
+        shape.begin(ShapeRenderer.ShapeType.Filled)
+
+        for (bullet in bullets) {
+            shape.color = bulletColor1
+            bullet.update(delta)
+            bullet.draw(shape)
+            shape.color = userColor
+        }
+        shape.end()
+    }
+
+    private fun scoreBoardDraw(){
+        val font = BitmapFont()
+        val batch = SpriteBatch()
+        val glyphLayout = GlyphLayout()
+        val message = "Score:$score"
+        glyphLayout.setText(font, message)
+        batch.begin()
+        font.draw(batch, glyphLayout, (scoreBoardPositionX).toFloat(),(scoreBoardPositionY).toFloat())
+        batch.end()
+    }
+
+    private fun updateScore(sc: Int) : Int{
+        return sc + bonusPoint
+    }
+
+    private fun enemyRandomGenerate(){
+        if (MathUtils.randomBoolean(ENEMY_SPAWN_CHANCE)) {
+            val enemyX = MathUtils.random(viewport.worldWidth.toFloat() - ENEMY_WIDTH)
+            val enemyY = viewport.worldHeight
+            val enemySpeedY = MathUtils.random(MIN_ENEMY_SPEED_Y, MAX_ENEMY_SPEED_Y)
+            enemies.add(Enemy(enemyX, enemyY, ENEMY_WIDTH, ENEMY_HEIGHT, enemySpeedY))
+        }
+    }
+
+    private fun enemyRemove(delta: Float){
+        enemies.removeAll { enemy -> enemy.isOutOfScreen(viewport.worldHeight) }
+
+        shape.begin(ShapeRenderer.ShapeType.Filled)
+        shape.color = ENEMY_COLOR
+
+        for (enemy in enemies) {
+            enemy.update(delta)
+            enemy.draw(shape)
+        }
+    }
 }
 
-class Enemy(
-    private val x: Float,
-    private var y: Float,
-    private val width: Float,
-    private val height: Float,
-    private val speedY: Float
-) {
-    companion object {
-        private val ENEMY_COLOR: Color = Color.BLUE
-    }
-
-    fun update(delta: Float) {
-        y -= speedY * delta
-    }
-
-    fun draw(shapeRenderer: ShapeRenderer) {
-        shapeRenderer.color = ENEMY_COLOR
-        shapeRenderer.rect(x, y, width, height)
-    }
-
-    fun isOutOfScreen(screenHeight: Float): Boolean {
-        return y + height < 0f
-    }
-
-    fun isHitByBullet(bullet: Bullet): Boolean {
-        return bullet.x >= x && bullet.x <= x + width && bullet.y >= y && bullet.y <= y + height
-    }
-}
