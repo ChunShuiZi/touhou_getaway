@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 class Enemy(
-    private val x: Float,
-    private var y: Float,
+    val enemyPositionX: Float,
+    var enemyPositionY: Float,
     private val width: Float,
     private val height: Float,
     private val speedY: Float
@@ -15,19 +15,19 @@ class Enemy(
     }
 
     fun update(delta: Float) {
-        y -= speedY * delta
+        enemyPositionY -= speedY * delta
     }
 
     fun draw(shapeRenderer: ShapeRenderer) {
         shapeRenderer.color = ENEMY_COLOR
-        shapeRenderer.rect(x, y, width, height)
+        shapeRenderer.rect(enemyPositionX, enemyPositionY, width, height)
     }
 
-    fun isOutOfScreen(screenHeight: Float): Boolean {
-        return y + height < 0f
+    fun enemyIsOutOfScreen(screenHeight: Float): Boolean {
+        return enemyPositionY + height < 0f
     }
 
-    fun isHitByBullet(bullet: Bullet): Boolean {
-        return bullet.x >= x && bullet.x <= x + width && bullet.y >= y && bullet.y <= y + height
+    fun enemyIsHitByBullet(bullet: Bullet): Boolean {
+        return bullet.x >= enemyPositionX && bullet.x <= enemyPositionX + width && bullet.y >= enemyPositionY && bullet.y <= enemyPositionY + height
     }
 }

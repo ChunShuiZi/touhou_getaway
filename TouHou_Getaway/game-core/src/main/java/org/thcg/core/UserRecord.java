@@ -9,13 +9,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lombok.extern.slf4j.Slf4j;
+import org.thcg.screen.User;
 
 import static org.lwjgl.system.linux.X11.False;
 import static org.lwjgl.system.linux.X11.True;
 import static org.thcg.util.GameConstant.*;
 
 @Slf4j
-public class UserRecord extends User{
+public class UserRecord extends User {
     private File recordFileChecker;
     public File recordFile;
     private final String userFileName;
@@ -51,7 +52,7 @@ public class UserRecord extends User{
     public UserRecord(String username){
         this.recordTime = "";
         this.newRecord = 0;
-        this.userFileName = DEFAULT_USER_NAME;
+        this.userFileName = username;
         for(int i = 0; i < gameModeCount; i++){
             try{
                 this.recordFileChecker = new File(USER_FILE_PATH + "/" + userFileName + "/" + GAME_MODE[i]);
@@ -136,7 +137,7 @@ public class UserRecord extends User{
                 FileWriter fw = new FileWriter(recordFileChecker);
                 BufferedWriter bw = new BufferedWriter(fw);
 
-                bw.write(user.userName + "\n");
+                bw.write(user.getUserName() + "\n");
 
                 bw.close();
                 fw.close();
