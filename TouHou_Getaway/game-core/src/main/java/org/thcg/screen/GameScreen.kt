@@ -30,7 +30,7 @@ class GameScreen : ManagedScreenAdapter() {
         private val MAX_ENEMY_SPEED_Y: Float = 125f
         private val ENEMY_WIDTH: Float = 25f
         private val ENEMY_HEIGHT: Float = 25f
-        private val ENEMY_SHOOT_DESIRE: Float = 100f
+        private val ENEMY_SHOOT_DESIRE: Float = 10f
     }
 
     private var inputProcessor: MyInputProcessor = MyInputProcessor(this)// 创建MyInputProcessor对象，并传入当前实例
@@ -74,6 +74,7 @@ class GameScreen : ManagedScreenAdapter() {
         enemyRandomGenerate() // 生成随机敌机
         enemyRemove(delta) // 移除已经飞出屏幕的敌机
         enemies.forEach { enemy -> enemyRandomShotBullets(enemy)}
+        enemyBulletsUpdate()
         shape.color = Color.RED
         shape.end()
     }
@@ -258,16 +259,13 @@ class GameScreen : ManagedScreenAdapter() {
         }
     }
 
-    private fun enemyRandomShotBullets(enemy: Enemy){
-        if(ENEMY_SHOOT_DESIRE > MathUtils.random(0,1000) && enemy.enemyPositionY > viewport.worldHeight * 3 / 4){
-            enemyBullets.add(Bullet(enemy.enemyPositionX.toInt(), enemy.enemyPositionY.toInt(), 5, 1))
-        }
-        enemyBullets.removeAll { bullet ->
-            val hitUser = enemyBullets.find{ bullet -> userIsHitByBullet(bullet)}
-            if (hitUser != null) {
-                score -= 50//中弹惩罚
+    private fun enemyBulletsUpdate(){
+        enemyBullets.removeAll { bullet: Bullet ->
+            val hitUser = enemyBullets.find{userIsHitByBullet(bullet)}
+            if(hitUser != null){
+                score -= 2
                 true
-            } else {
+            }else{
                 bullet.isExpired()
             }
         }
@@ -277,11 +275,17 @@ class GameScreen : ManagedScreenAdapter() {
 
         for (bullet in enemyBullets){
             shape.color = bulletColor1
-            bullet.enemyBulletUpdate(1.5f)
+            bullet.enemyBulletUpdate(3f)
             bullet.draw(shape)
             shape.color = userColor
         }
         shape.end()
+    }
+
+    private fun enemyRandomShotBullets(enemy: Enemy){
+        if(ENEMY_SHOOT_DESIRE > MathUtils.random(0,1000) && enemy.enemyPositionY > viewport.worldHeight * 3 / 4){
+            enemyBullets.add(Bullet(enemy.enemyPositionX.toInt(), enemy.enemyPositionY.toInt(), 5, 1))
+        }
     }
     private fun userIsHitByBullet(bullet: Bullet): Boolean {
         return bullet.x >= userPositionX && bullet.x <= userPositionX + userWidth && bullet.y >= userPositionY && bullet.y <= userPositionY + userHeight
