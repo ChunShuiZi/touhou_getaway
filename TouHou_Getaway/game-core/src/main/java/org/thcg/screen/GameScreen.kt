@@ -30,13 +30,17 @@ class GameScreen : ManagedScreenAdapter() {
         private val MAX_ENEMY_SPEED_Y: Float = 125f
         private val ENEMY_WIDTH: Float = 25f
         private val ENEMY_HEIGHT: Float = 25f
-        private val ENEMY_SHOOT_DESIRE: Float = 10f
+        private var ENEMY_SHOOT_DESIRE: Float = 10f
     }
 
     private var inputProcessor: MyInputProcessor = MyInputProcessor(this)// 创建MyInputProcessor对象，并传入当前实例
     private var userBullets: MutableList<Bullet> = mutableListOf()  // 用于存储用户子弹对象的列表
     private var enemyBullets: MutableList<Bullet> = mutableListOf() // 用于存储敌机子弹对象的列表
     private var enemies: MutableList<Enemy> = mutableListOf() // 用于存储敌机对象的列表
+    private val generateSpeedList: MutableList<Int> = mutableListOf(0, 0, 0, 0, 0, 0, 6, 33, 52, 68, 83, 98, 112, 125, 138, 150, 162, 174, 186, 198, 209, 221,
+        232, 243, 254, 264, 275, 286, 296, 307, 300, 324, 348, 372, 396, 418, 442, 464, 486, 508, 528, 550, 572, 592, 614, 634, 654, 676, 696, 716, 736, 756,
+        776, 796, 814, 834, 854, 874, 892, 912, 930, 950, 968, 988, 1006, 1024, 1044)
+    private var generateSpeed: Int = 5
 
     private var userShooting: Int = 0
     // 初始化人物位置
@@ -71,7 +75,7 @@ class GameScreen : ManagedScreenAdapter() {
         userPositionUpdate()//自机位置更新
         userShotBullets(delta)//自机射击子弹
         scoreBoardDraw()//渲染得分
-        enemyRandomGenerate() // 生成随机敌机
+        enemyGenerate() // 生成随机敌机
         enemyRemove(delta) // 移除已经飞出屏幕的敌机
         enemies.forEach { enemy -> enemyRandomShotBullets(enemy)}
         enemyBulletsUpdate()
@@ -250,27 +254,44 @@ class GameScreen : ManagedScreenAdapter() {
         return MathUtils.cos(MathUtils.random(-1000000f,1000000f)) + 1
     }
 
-    private fun enemyRandomGenerate(){
-        if (MathUtils.randomBoolean(ENEMY_SPAWN_CHANCE)) {
-            val enemyX = randomSineDistributionPattern() / 2 * (viewport.worldWidth- ENEMY_WIDTH)
+    private fun enemyGenerate(){
+        if (enemyProgressiveGeneratePattern()) {
+            val enemyX = (randomSineDistributionPattern() + randomCosineDistributionPattern())/ 4 * (viewport.worldWidth- ENEMY_WIDTH)
             val enemyY = viewport.worldHeight
             val enemySpeedY = MathUtils.random(MIN_ENEMY_SPEED_Y, MAX_ENEMY_SPEED_Y)
             enemies.add(Enemy(enemyX, enemyY, ENEMY_WIDTH, ENEMY_HEIGHT, enemySpeedY))
         }
     }
 
+    private fun enemyRandomGeneratePattern(): Boolean{
+        ENEMY_SHOOT_DESIRE = 10f + (score / 200).toFloat()//全体敌机弹幕随分数增加变多
+        val boolean = enemies.size < generateSpeed
+        return boolean
+    }
+
+    private fun enemyProgressiveGeneratePattern(): Boolean{
+        if(score > generateSpeedList[generateSpeed] && generateSpeed < generateSpeedList.size - 1){//设置渐进速度，逐步加快
+            generateSpeed += 1
+        }else if(score > 520){
+            enemyRandomGeneratePattern()
+        }//速度达到最大值后进入随机生成
+        val boolean = enemies.size < generateSpeed
+        return boolean
+    }
+
     private fun enemyBulletsUpdate(){
         enemyBullets.removeAll { bullet: Bullet ->
             val hitUser = enemyBullets.find{userIsHitByBullet(bullet)}
             if(hitUser != null){
-                score -= 2
+                score -= 50
+                if(generateSpeed > 8)
+                    generateSpeed -= 3
                 true
             }else{
                 bullet.isExpired()
             }
         }
 
-        shape.end()
         shape.begin(ShapeRenderer.ShapeType.Filled)
 
         for (bullet in enemyBullets){
@@ -301,6 +322,7 @@ class GameScreen : ManagedScreenAdapter() {
             enemy.update(delta)
             enemy.draw(shape)
         }
+        shape.end()
     }
 }
 
