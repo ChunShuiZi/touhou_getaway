@@ -37,10 +37,10 @@ class GameScreen : ManagedScreenAdapter() {
     private var userBullets: MutableList<Bullet> = mutableListOf()  // 用于存储用户子弹对象的列表
     private var enemyBullets: MutableList<Bullet> = mutableListOf() // 用于存储敌机子弹对象的列表
     private var enemies: MutableList<Enemy> = mutableListOf() // 用于存储敌机对象的列表
-    private val generateSpeedList: MutableList<Int> = mutableListOf(0, 0, 0, 0, 0, 0, 6, 33, 52, 68, 83, 98, 112, 125, 138, 150, 162, 174, 186, 198, 209, 221,
-        232, 243, 254, 264, 275, 286, 296, 307, 300, 324, 348, 372, 396, 418, 442, 464, 486, 508, 528, 550, 572, 592, 614, 634, 654, 676, 696, 716, 736, 756,
-        776, 796, 814, 834, 854, 874, 892, 912, 930, 950, 968, 988, 1006, 1024, 1044)
+    private val generateSpeedList: MutableList<Int> = mutableListOf(0, 0, 0, 0, 0, 0, 33, 68, 98, 125, 150, 174, 198, 221, 243,
+        264, 286, 307, 324, 372, 418, 464, 508, 550, 592, 634, 676, 716, 756, 796, 834, 874, 912, 950, 988, 1024)
     private var generateSpeed: Int = 5
+    private var generateSpeedMax: Int = generateSpeedList[generateSpeedList.size - 1]
 
     private var userShooting: Int = 0
     // 初始化人物位置
@@ -56,6 +56,7 @@ class GameScreen : ManagedScreenAdapter() {
     private var viewport: ScreenViewport = ScreenViewport()// 创建ScreenViewport对象，用于处理屏幕显示区域
     private val userColor = Color.RED // 设置绘制颜色为红色
     private val bulletColor1 = Color.WHITE // 设置绘制颜色为白色
+    private val bulletRadius1 = 5
     private var slow = 0
     private var score = 0
     private val bonusPoint = 1
@@ -206,7 +207,7 @@ class GameScreen : ManagedScreenAdapter() {
     }
 
     private fun userShotBullets(delta: Float){
-        if(userShooting==1) { userBullets.add(Bullet(userPositionX, userPositionY, 5, 1)) }
+        if(userShooting==1) { userBullets.add(Bullet(userPositionX, userPositionY, bulletRadius1, 1)) }
         // 移除已过期的子弹并更新和绘制子弹
         userBullets.removeAll { bullet ->
             val hitEnemy = enemies.find { enemy -> enemy.enemyIsHitByBullet(bullet) }
@@ -264,15 +265,17 @@ class GameScreen : ManagedScreenAdapter() {
     }
 
     private fun enemyRandomGeneratePattern(): Boolean{
-        ENEMY_SHOOT_DESIRE = 10f + (score / 200).toFloat()//全体敌机弹幕随分数增加变多
+        ENEMY_SHOOT_DESIRE = 10f + ((score - 1000) / 200).toFloat()//全体敌机弹幕随分数增加变多
         val boolean = enemies.size < generateSpeed
         return boolean
     }
 
     private fun enemyProgressiveGeneratePattern(): Boolean{
-        if(score > generateSpeedList[generateSpeed] && generateSpeed < generateSpeedList.size - 1){//设置渐进速度，逐步加快
+        if(score > generateSpeedList[generateSpeed] && generateSpeed < generateSpeedMax){//设置渐进速度，逐步加快
             generateSpeed += 1
-        }else if(score > 520){
+        }else if (score < generateSpeedList[generateSpeed] && generateSpeed > 5){
+            generateSpeed -= 1
+        } else if(score > generateSpeedMax){
             enemyRandomGeneratePattern()
         }//速度达到最大值后进入随机生成
         val boolean = enemies.size < generateSpeed
@@ -284,8 +287,6 @@ class GameScreen : ManagedScreenAdapter() {
             val hitUser = enemyBullets.find{userIsHitByBullet(bullet)}
             if(hitUser != null){
                 score -= 50
-                if(generateSpeed > 8)
-                    generateSpeed -= 3
                 true
             }else{
                 bullet.isExpired()
@@ -305,11 +306,14 @@ class GameScreen : ManagedScreenAdapter() {
 
     private fun enemyRandomShotBullets(enemy: Enemy){
         if(ENEMY_SHOOT_DESIRE > MathUtils.random(0,1000) && enemy.enemyPositionY > viewport.worldHeight * 3 / 4){
-            enemyBullets.add(Bullet(enemy.enemyPositionX.toInt(), enemy.enemyPositionY.toInt(), 5, 1))
+            enemyBullets.add(Bullet(enemy.enemyPositionX.toInt(), enemy.enemyPositionY.toInt(), bulletRadius1, 1))
         }
     }
     private fun userIsHitByBullet(bullet: Bullet): Boolean {
-        return bullet.x >= userPositionX && bullet.x <= userPositionX + userWidth && bullet.y >= userPositionY && bullet.y <= userPositionY + userHeight
+        return  bullet.x + bulletRadius1 >= userPositionX - userWidth &&
+                bullet.x - bulletRadius1 <= userPositionX + userWidth &&
+                bullet.y + bulletRadius1 >= userPositionY - userHeight &&
+                bullet.y - bulletRadius1 <= userPositionY + userHeight
     }
 
     private fun enemyRemove(delta: Float){
