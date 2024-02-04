@@ -2,7 +2,7 @@ package org.thcg.screen
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
-class Bullet(
+open class Bullet(
     var x: Int,
     var y: Int,
     private val size: Int,
